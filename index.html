@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="mr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10233f"><title>MAHA CORNER | Marathi Poster Studio</title>
+<style>
+:root{--navy:#10233f;--blue:#174d70;--gold:#f4b942;--paper:#f4f6fa;--ink:#17243a}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,"Noto Sans Devanagari",sans-serif;background:var(--paper);color:var(--ink)}
+header{background:linear-gradient(120deg,var(--navy),var(--blue));color:white;padding:20px max(5%,calc((100% - 1180px)/2));display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.logo{font-size:26px;font-weight:900;letter-spacing:.5px}.logo b{color:var(--gold)}header small{opacity:.85}
+.hero{max-width:1180px;margin:34px auto 22px;padding:0 18px}.hero h1{font-size:clamp(28px,5vw,46px);margin:0 0 8px;color:var(--navy)}.hero p{color:#5d6a7c;margin:0}
+.layout{max-width:1180px;margin:0 auto;padding:0 18px 35px;display:grid;grid-template-columns:340px 1fr;gap:20px}
+.panel,.stage{background:white;border-radius:18px;padding:20px;box-shadow:0 8px 28px #15243a12}.panel h2,.stage h2{font-size:20px;margin:0 0 15px}
+label{display:block;font-size:14px;font-weight:700;margin:13px 0 6px}input,textarea,select,button{font:inherit}input[type=text],textarea,select{width:100%;padding:11px;border:1px solid #d7deea;border-radius:10px;background:#fff;color:var(--ink)}textarea{min-height:90px;resize:vertical}input[type=color]{width:100%;height:42px;border:0;background:none}input[type=file]{width:100%;font-size:13px}
+button{border:0;border-radius:11px;padding:12px 15px;font-weight:800;cursor:pointer}.primary{background:var(--gold);color:#182338;width:100%;margin-top:16px}.secondary{background:#eaf0f6;color:var(--navy);width:100%;margin-top:9px}
+.stage{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:550px}.stage canvas{width:min(100%,560px);height:auto;border-radius:9px;box-shadow:0 8px 28px #0002;background:#fff}
+.help{font-size:12px;line-height:1.6;color:#6b7789}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.chip{background:#edf2f8;color:#28435e;padding:7px 11px;border-radius:99px;font-size:12px;font-weight:700}
+footer{text-align:center;color:#778397;padding:20px;font-size:12px}
+@media(max-width:820px){.layout{grid-template-columns:1fr}.stage{min-height:0}.hero{margin-top:24px}header{padding:17px 5%}}
+</style>
+</head>
+<body>
+<header><div><div class="logo">MAHA <b>CORNER</b></div><small>तुमच्या कल्पनांना डिजिटल रूप द्या</small></div><div>मराठी पोस्टर स्टुडिओ</div></header>
+<section class="hero"><h1>तुमचे पोस्टर, तुमच्या कल्पनेतून.</h1><p>मराठीत मजकूर लिहा, फोटो जोडा आणि तुमचे पोस्टर PNG स्वरूपात डाउनलोड करा.</p><div class="chips"><span class="chip">मोबाईलसाठी अनुकूल</span><span class="chip">मराठी मजकूर</span><span class="chip">HD PNG डाउनलोड</span></div></section>
+<main class="layout">
+<section class="panel"><h2>पोस्टर एडिटर</h2>
+<label for="title">मुख्य शीर्षक</label><input id="title" type="text" value="आपले हार्दिक स्वागत!">
+<label for="message">पोस्टरवरील मजकूर</label><textarea id="message">महत्त्वाची माहिती येथे लिहा.\nआपला संदेश आकर्षक पद्धतीने मांडा.</textarea>
+<label for="footerText">खालील नाव / संपर्क</label><input id="footerText" type="text" value="MAHA CORNER">
+<label for="bg">पार्श्वभूमीचा रंग</label><input id="bg" type="color" value="#123c5a">
+<label for="fg">मजकुराचा रंग</label><input id="fg" type="color" value="#ffffff">
+<label for="photo">स्वतःचा फोटो (ऐच्छिक)</label><input id="photo" type="file" accept="image/*">
+<label for="format">पोस्टर आकार</label><select id="format"><option value="1080,1350">Instagram पोस्ट – 4:5</option><option value="1080,1080">चौरस पोस्ट – 1:1</option><option value="1080,1920">WhatsApp Status – 9:16</option><option value="1920,1080">Landscape – 16:9</option></select>
+<button class="primary" id="download">⬇ HD पोस्टर डाउनलोड करा</button><button class="secondary" id="reset">मजकूर Reset करा</button>
+<p class="help">सूचना: डाउनलोड करण्यापूर्वी नाव, संपर्क आणि मजकूर तपासा. अपलोड केलेला फोटो या ब्राउझरमध्येच वापरला जातो; तो सर्व्हरवर पाठवला जात नाही.</p>
+</section>
+<section class="stage"><h2>लाईव्ह Preview</h2><canvas id="poster" width="1080" height="1350"></canvas></section>
+</main><footer>© 2026 MAHA CORNER • पहिली आवृत्ती</footer>
+<script>
+const el=id=>document.getElementById(id),canvas=el('poster'),ctx=canvas.getContext('2d');let uploaded=null;
+function linesFor(text,max,font){ctx.font=font;const out=[];String(text).split('\n').forEach(p=>{let line='';p.split(/\s+/).forEach(word=>{const test=line?line+' '+word:word;if(line&&ctx.measureText(test).width>max){out.push(line);line=word}else line=test});out.push(line)});return out}
+function draw(){const [w,h]=el('format').value.split(',').map(Number);canvas.width=w;canvas.height=h;const fg=el('fg').value;ctx.fillStyle=el('bg').value;ctx.fillRect(0,0,w,h);
+if(uploaded){const s=Math.max(w/uploaded.width,h/uploaded.height),iw=uploaded.width*s,ih=uploaded.height*s;ctx.globalAlpha=.32;ctx.drawImage(uploaded,(w-iw)/2,(h-ih)/2,iw,ih);ctx.globalAlpha=1}
+ctx.fillStyle='rgba(0,0,0,.22)';ctx.fillRect(0,0,w,h);ctx.strokeStyle='#f4b942';ctx.lineWidth=Math.max(7,w*.008);ctx.strokeRect(w*.035,h*.025,w*.93,h*.95);
+ctx.textAlign='center';ctx.fillStyle='#f4b942';ctx.font='800 '+(w*.034)+'px system-ui';ctx.fillText('MAHA CORNER',w/2,h*.105);
+const titleFont='800 '+(w*.075)+'px system-ui';const titleLines=linesFor(el('title').value,w*.82,titleFont);ctx.font=titleFont;ctx.fillStyle=fg;let y=h*.32;titleLines.forEach(t=>{ctx.fillText(t,w/2,y);y+=w*.095});
+y+=h*.035;const bodyFont='500 '+(w*.038)+'px system-ui';const bodyLines=linesFor(el('message').value,w*.78,bodyFont);ctx.font=bodyFont;bodyLines.forEach(t=>{ctx.fillText(t,w/2,y);y+=w*.057});
+ctx.fillStyle='#f4b942';ctx.fillRect(w*.22,h*.82,w*.56,Math.max(3,h*.003));ctx.fillStyle=fg;ctx.font='700 '+(w*.043)+'px system-ui';ctx.fillText(el('footerText').value,w/2,h*.89)}
+['title','message','footerText','bg','fg','format'].forEach(id=>el(id).addEventListener('input',draw));
+el('photo').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const img=new Image();img.onload=()=>{uploaded=img;draw()};img.src=URL.createObjectURL(f)});
+el('download').addEventListener('click',()=>{const a=document.createElement('a');a.download='maha-corner-poster.png';a.href=canvas.toDataURL('image/png');a.click()});
+el('reset').addEventListener('click',()=>{uploaded=null;el('photo').value='';el('title').value='आपले हार्दिक स्वागत!';el('message').value='महत्त्वाची माहिती येथे लिहा.\nआपला संदेश आकर्षक पद्धतीने मांडा.';el('footerText').value='MAHA CORNER';el('bg').value='#123c5a';el('fg').value='#ffffff';el('format').value='1080,1350';draw()});draw();
+</script></body></html>
