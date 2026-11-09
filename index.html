@@ -95,7 +95,7 @@ textarea{min-height:100px}
 <button class="preset" data-preset="scheme">🏛️ सरकारी योजना</button>
 <button class="preset" data-preset="farmer">🌾 शेतकरी माहिती</button>
 <button class="preset" data-preset="job">💼 नोकरी अपडेट</button>
-<button class="preset" data-preset="ad">📢 जाहिरात</button>
+<button class="preset" data-preset="ad">📢 जाहिरात</button><button class="preset" data-preset="farmerPro">🌾 प्रो शेतकरी</button><button class="preset" data-preset="schemePro">🏛️ प्रो योजना</button>
 </div>
 <label for="libraryCategory">120+ तयार पोस्टर टेम्पलेट (12 विभाग)</label><div class="row"><select id="libraryCategory"><option value="">विभाग निवडा</option></select><select id="libraryTemplate"><option value="">पोस्टर निवडा</option></select></div><button class="secondary" id="applyLibrary" type="button" style="width:100%;margin-top:8px">निवडलेले पोस्टर वापरा</button><p class="help">सरकारी योजना, शेती, नोकरी, शिक्षण, आरोग्य, व्यवसाय, सण, जनजागृती, ग्रामपंचायत, डिजिटल सेवा, हवामान आणि सामान्य सूचना.</p><label for="savedTemplates">माझे सेव्ह केलेले टेम्पलेट</label>
 <div class="row"><select id="savedTemplates"><option value="">टेम्पलेट निवडा</option></select><button class="secondary" id="loadTemplate" type="button">लोड करा</button></div>
@@ -109,7 +109,7 @@ textarea{min-height:100px}
 <div><label for="bg">पार्श्वभूमीचा रंग</label><input id="bg" type="color" value="#123c5a"></div>
 <div><label for="fg">मजकुराचा रंग</label><input id="fg" type="color" value="#ffffff"></div>
 </div>
-<label for="designStyle">पोस्टर डिझाइन शैली</label><select id="designStyle"><option value="premium">✨ प्रीमियम 3D</option><option value="classic">🏛️ क्लासिक</option><option value="festive">🎉 उत्सवी</option><option value="minimal">◻️ मिनिमल</option></select>
+<label for="designStyle">पोस्टर डिझाइन शैली</label><select id="designStyle"><option value="premium">✨ प्रीमियम 3D</option><option value="classic">🏛️ क्लासिक</option><option value="festive">🎉 उत्सवी</option><option value="minimal">◻️ मिनिमल</option><option value="farmer">🌾 शेतकरी अपडेट</option><option value="scheme">🏛️ सरकारी योजना</option></select>
 <label for="photo">पोस्टरमधील फोटो (ऐच्छिक)</label><input id="photo" type="file" accept="image/*">
 <label for="logoUpload">तुमचा लोगो अपलोड करा (एकदा सेव्ह करा)</label><input id="logoUpload" type="file" accept="image/*">
 <p class="help">लोगो या ब्राउझरमध्ये सेव्ह राहील. त्याच मोबाईल/ब्राउझरमध्ये पुढच्या वेळी पुन्हा अपलोड करावा लागणार नाही.</p>
@@ -133,6 +133,8 @@ job:{title:'नोकरी भरती अपडेट',message:'इच्छ�
 ad:{title:'आपले हार्दिक स्वागत!',message:'ऑनलाइन सेवा व डिजिटल कामांसाठी संपर्क साधा.\nवेळेची बचत • विश्वासार्ह सेवा • योग्य मार्गदर्शन',bg:'#742e37',fg:'#ffffff'}
 };
 
+presets.farmerPro={title:'शेतकरी बांधवांसाठी महत्त्वाची अपडेट',message:'• योजनेची पात्रता तपासा.\n• आवश्यक कागदपत्रे तयार ठेवा.\n• अर्जाची अंतिम तारीख लक्षात ठेवा.\n• अधिकृत माहितीसाठी संबंधित कार्यालयाशी संपर्क साधा.',bg:'#075b32',fg:'#ffffff'};
+presets.schemePro={title:'शासकीय योजनेचा लाभ घ्या!',message:'• पात्रता व अटी काळजीपूर्वक वाचा.\n• आवश्यक कागदपत्रांसह अर्ज करा.\n• अर्जाची पावती जतन करा.\n• अधिकृत संकेतस्थळावर माहिती तपासा.',bg:'#123c5a',fg:'#ffffff'};
 const posterLibrary=[["🏛️ सरकारी योजना",["शासकीय योजनेची माहिती","पात्र लाभार्थ्यांसाठी सूचना","योजनेचा लाभ घ्या","अर्ज प्रक्रिया सुरू","लाभार्थ्यांनी लक्ष द्या","आवश्यक कागदपत्रे","महत्त्वाची सरकारी सूचना","अर्ज करण्यापूर्वी वाचा","नागरिकांसाठी बातमी","योजनेसाठी संपर्क"],"पात्रता व अटी तपासूनच अर्ज करा. आवश्यक कागदपत्रे तयार ठेवा. अधिकृत माहितीसाठी संबंधित विभागाशी संपर्क साधा."],["🌾 शेती व शेतकरी",["शेतकरी बांधवांसाठी सूचना","शेतीविषयक माहिती","पीक विमा मार्गदर्शन","शेतकरी योजनांचा लाभ","लागवडीपूर्वी वाचा","कृषी विभागाची सूचना","शेतमाल बाजारभाव अपडेट","शेतकऱ्यांसाठी मार्गदर्शन","पीक संरक्षण जनजागृती","शेतीतील नवीन अपडेट"],"अर्ज करण्यापूर्वी पात्रता, कागदपत्रे व अंतिम तारीख तपासा. खरी माहितीच नोंदवा. अधिकृत कृषी सूचनांचे पालन करा."],["💼 नोकरी व भरती",["नोकरी भरती अपडेट","उमेदवारांसाठी संधी","भरतीची महत्त्वाची सूचना","सरकारी नोकरीची माहिती","अर्ज करण्यापूर्वी तपासा","भरती प्रक्रियेची सूचना","नवीन रोजगार संधी","उमेदवारांनी लक्ष द्या","ऑनलाइन अर्ज मार्गदर्शन","नोकरीविषयक बातमी"],"अधिकृत जाहिरात वाचा. पात्रता, वयोमर्यादा, शुल्क आणि अंतिम तारीख तपासा. फक्त अधिकृत संकेतस्थळावरून अर्ज करा."],["📚 शिक्षण व विद्यार्थी",["विद्यार्थ्यांसाठी सूचना","शिष्यवृत्ती अपडेट","प्रवेश प्रक्रियेची माहिती","परीक्षेची तयारी","पालक व विद्यार्थ्यांनी लक्ष द्या","शैक्षणिक योजनेचा लाभ","ऑनलाइन अर्ज मार्गदर्शन","विद्यार्थ्यांसाठी संधी","महाविद्यालयीन सूचना","शिक्षणविषयक बातमी"],"पात्रता, आवश्यक कागदपत्रे व अंतिम तारीख तपासा. अर्जातील माहिती काळजीपूर्वक भरा आणि पावती जतन करा."],["🩺 आरोग्य व जनजागृती",["आरोग्य हीच संपत्ती","आरोग्यविषयक जनजागृती","नागरिकांसाठी आरोग्य सूचना","स्वच्छता राखा, निरोगी राहा","कुटुंबाच्या आरोग्याची काळजी","आरोग्य तपासणीचे महत्त्व","सार्वजनिक आरोग्य संदेश","आरोग्य सेवांची माहिती","आरोग्याची काळजी घ्या","निरोगी जीवनाचा संदेश"],"स्वच्छ पाणी प्या, परिसर स्वच्छ ठेवा आणि आरोग्याची काळजी घ्या. त्रास असल्यास पात्र आरोग्य तज्ज्ञांचा सल्ला घ्या."],["📢 व्यवसाय व जाहिरात",["आपल्या सेवांचा लाभ घ्या","विश्वासार्ह सेवा","आपला व्यवसाय, आपली ओळख","आजच संपर्क साधा","ग्राहकांसाठी सूचना","डिजिटल सेवा उपलब्ध","आपल्या सेवांची माहिती","वेळेची बचत","सेवा व सुविधांची माहिती","हार्दिक स्वागत"],"ऑनलाइन सेवा व डिजिटल कामांसाठी संपर्क साधा. सेवा, शुल्क व आवश्यक कागदपत्रांची माहिती आधीच स्पष्ट करून घ्या."],["🎉 सण व शुभेच्छा",["हार्दिक शुभेच्छा","आनंदाचा सण","सणाच्या मंगलमय शुभेच्छा","मनःपूर्वक शुभेच्छा","नव्या सुरुवातीच्या शुभेच्छा","उत्सव आनंदाने साजरा करूया","मंगलमय दिवसाच्या शुभेच्छा","आनंद व समृद्धी लाभो","स्नेहबंध दृढ होवोत","शुभेच्छांचा खास संदेश"],"आपल्या जीवनात आनंद, आरोग्य, समाधान आणि भरभराट नांदो. आपणास व आपल्या परिवारास मनःपूर्वक शुभेच्छा!"],["🌍 सामाजिक जनजागृती",["जनजागृतीचा संदेश","आपली जबाबदारी","स्वच्छ गाव, सुंदर गाव","पाणी वाचवा","पर्यावरणाचे रक्षण","सुरक्षिततेला प्राधान्य","चांगल्या बदलासाठी पुढे या","नागरिकांनी सहकार्य करावे","सामाजिक बांधिलकी जपूया","आजचा संदेश"],"स्वच्छता राखा, पाण्याचा अपव्यय टाळा आणि पर्यावरणाचे रक्षण करा. अफवा पसरवू नका; माहितीची सत्यता तपासा."],["🏘️ ग्रामपंचायत व गाव",["ग्रामपंचायतीची सूचना","ग्रामस्थांना नम्र विनंती","गावाच्या विकासासाठी सहकार्य","ग्रामसभा सूचना","स्वच्छ व सुंदर गाव","ग्रामस्थांसाठी माहिती","नागरिकांनी नोंद घ्यावी","गावहितासाठी एकत्र येऊया","पाणी बचतीचे आवाहन","ग्रामपंचायत संदेश"],"सर्व ग्रामस्थांनी ग्रामपंचायतीच्या सूचनांचे पालन करावे. अधिक माहितीसाठी ग्रामपंचायत कार्यालयाशी संपर्क साधावा."],["💻 डिजिटल सेवा",["डिजिटल सेवा उपलब्ध","ऑनलाइन अर्ज मार्गदर्शन","घरबसल्या डिजिटल सुविधा","ऑनलाइन सूचना","नागरिकांसाठी डिजिटल मदत","ऑनलाइन सेवा व माहिती","अर्ज करण्यापूर्वी वाचा","डिजिटल कामांसाठी संपर्क","सोपे ऑनलाइन मार्गदर्शन","तंत्रज्ञानाचा योग्य वापर"],"अधिकृत वेबसाइटच वापरा. OTP, पासवर्ड किंवा बँकिंग माहिती कोणालाही सांगू नका. अर्जाची पावती सुरक्षित ठेवा."],["🌦️ हवामान व आपत्ती",["हवामानविषयक सूचना","पावसाचा अंदाज लक्षात घ्या","नागरिकांनी सतर्क राहावे","शेतकरी बांधवांनी नोंद घ्यावी","आपत्ती व्यवस्थापन संदेश","सुरक्षिततेसाठी खबरदारी","अतिवृष्टी काळातील सूचना","वादळी पावसापासून सावध","हवामान अपडेट","सतर्क राहा, सुरक्षित राहा"],"हवामान विभागाच्या अधिकृत सूचनांवर लक्ष ठेवा. परिस्थितीनुसार खबरदारी घ्या आणि आपत्कालीन स्थितीत प्रशासनाशी संपर्क साधा."],["🛍️ उत्पादन व सेवा",["नवीन उत्पादनाची माहिती","ग्राहकांसाठी खास माहिती","उपलब्ध सेवांची माहिती","गुणवत्तेला प्राधान्य","आपल्या गरजेसाठी पर्याय","सेवा तपशील जाणून घ्या","आजच चौकशी करा","ग्राहक सेवा सूचना","उत्पादन व सुविधांची माहिती","विश्वासाबद्दल धन्यवाद"],"उत्पादन किंवा सेवेचे तपशील, किंमत व अटी जाणून घेण्यासाठी संपर्क साधा. खरेदीपूर्वी सर्व माहिती तपासा."],["📌 सामान्य सूचना",["महत्त्वाची सार्वजनिक सूचना","सर्वांनी नोंद घ्यावी","तातडीची माहिती","नागरिकांसाठी आवाहन","वेळेत कार्यवाही करा","महत्त्वाची घोषणा","कृपया सहकार्य करावे","सूचना व मार्गदर्शन","संबंधितांसाठी संदेश","आपल्या माहितीसाठी"],"दिलेली सूचना काळजीपूर्वक वाचा आणि आवश्यक कार्यवाही वेळेत पूर्ण करा. अधिक माहितीसाठी संबंधित कार्यालयाशी संपर्क साधा."]];
 const catSelect=el('libraryCategory'),itemSelect=el('libraryTemplate');
 posterLibrary.forEach((cat,i)=>{const o=document.createElement('option');o.value=i;o.textContent=cat[0];catSelect.appendChild(o)});
@@ -140,9 +142,43 @@ function fillPosterLibrary(){itemSelect.innerHTML='<option value="">पोस्
 catSelect.addEventListener('change',fillPosterLibrary);
 el('applyLibrary').addEventListener('click',()=>{const cat=posterLibrary[Number(catSelect.value)],i=Number(itemSelect.value);if(!cat||itemSelect.value==='')return alert('कृपया विभाग आणि पोस्टर नमुना निवडा.');el('title').value=cat[1][i];el('message').value=cat[2];el('bg').value=['#123c5a','#174b35','#263b70','#742e37','#573d78','#285b62','#754a27','#343b50','#5b3a42','#244f70'][i%10];el('fg').value='#ffffff';draw()});
 function wrapLines(text,max,font){ctx.font=font;const out=[];String(text).split('\n').forEach(p=>{let line='';p.split(/\s+/).forEach(word=>{const test=line?line+' '+word:word;if(line&&ctx.measureText(test).width>max){out.push(line);line=word}else line=test});if(line)out.push(line)});return out}
+function roundedBox(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=5;ctx.stroke()}}
+function drawFeaturePoster(w,h,bg,fg,style){
+ ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+ const green=style==='farmer'?'#075b32':'#123c5a',gold='#f6c445',cream='#fffdf3',red='#d92d20';
+ ctx.fillStyle=green;ctx.fillRect(0,0,w,h*.19);
+ ctx.fillStyle=gold;ctx.fillRect(0,h*.185,w,h*.012);
+ ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillStyle='#fff';ctx.font='800 '+(w*.043)+'px system-ui,"Noto Sans Devanagari",sans-serif';
+ ctx.fillText(style==='farmer'?'शेतकरी बांधवांसाठी':'महत्त्वाची सरकारी माहिती',w*.065,h*.065);
+ ctx.fillStyle=gold;ctx.font='700 '+(w*.023)+'px system-ui,"Noto Sans Devanagari",sans-serif';ctx.fillText('महा कॉर्नर • माहिती अशी जी कामी येईल',w*.065,h*.12);
+ ctx.fillStyle=green;ctx.font='900 '+(w*.061)+'px system-ui,"Noto Sans Devanagari",sans-serif';
+ const titleLines=wrapLines(el('title').value,w*.86,'900 '+(w*.061)+'px system-ui,"Noto Sans Devanagari",sans-serif').slice(0,3);
+ let ty=h*.245;titleLines.forEach(line=>{ctx.fillText(line,w*.065,ty);ty+=h*.058});
+ let photoY=Math.max(h*.34,ty+h*.015),photoH=h*.25;
+ if(uploaded){
+  const maxW=w*.87,maxH=photoH,s=Math.min(maxW/uploaded.width,maxH/uploaded.height),iw=uploaded.width*s,ih=uploaded.height*s,px=(w-iw)/2;
+  roundedBox(px-w*.008,photoY-w*.008,iw+w*.016,ih+w*.016,w*.018,'#fff',gold);ctx.save();ctx.beginPath();ctx.rect(px,photoY,iw,ih);ctx.clip();ctx.drawImage(uploaded,px,photoY,iw,ih);ctx.restore();
+ } else {
+  roundedBox(w*.065,photoY,w*.87,photoH,w*.02,style==='farmer'?'#d8edcf':'#e6edf5',gold);
+  ctx.textAlign='center';ctx.fillStyle=green;ctx.font='800 '+(w*.045)+'px system-ui,"Noto Sans Devanagari",sans-serif';ctx.fillText(style==='farmer'?'🌾 शेती • पीक • शेतकरी':'योजना • पात्रता • अर्ज प्रक्रिया',w/2,photoY+photoH/2);
+ }
+ const infoY=photoY+photoH+h*.035,infoH=h*.255;
+ roundedBox(w*.055,infoY,w*.89,infoH,w*.02,cream,'#e6d6a6');
+ const bodyFont='600 '+(w*.031)+'px system-ui,"Noto Sans Devanagari",sans-serif';
+ const lines=wrapLines(el('message').value,w*.80,bodyFont).slice(0,8);
+ ctx.textAlign='left';ctx.fillStyle='#182b24';ctx.font=bodyFont;
+ let by=infoY+h*.045;const step=h*.037;
+ lines.forEach((line,i)=>{ctx.fillStyle=i===0?green:'#182b24';ctx.fillText((i===0?'• ':'')+line,w*.09,by);by+=step});
+ ctx.fillStyle=style==='farmer'?'#075b32':'#6b3516';ctx.fillRect(0,h*.88,w,h*.12);
+ ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='800 '+(w*.036)+'px system-ui,"Noto Sans Devanagari",sans-serif';
+ ctx.fillText(el('footerText').value,w/2,h*.925);
+ ctx.fillStyle='#ffe7a2';ctx.font='600 '+(w*.021)+'px system-ui,"Noto Sans Devanagari",sans-serif';ctx.fillText('अधिकृत माहिती तपासूनच पुढील कार्यवाही करा',w/2,h*.965);
+ if(logoImage){const max=w*.10,s=Math.min(max/logoImage.width,max/logoImage.height);ctx.drawImage(logoImage,w*.84,h*.035,logoImage.width*s,logoImage.height*s)}
+}
 function draw(){
 const size=el('format').value.split(',').map(Number),w=size[0],h=size[1];canvas.width=w;canvas.height=h;
 const style=el('designStyle')?el('designStyle').value:'premium',bg=el('bg').value,fg=el('fg').value;
+if(style==='farmer'||style==='scheme'){drawFeaturePoster(w,h,bg,fg,style);const status=el('previewStatus');if(status)status.textContent='पोस्टर तयार आहे ✓';return;}
 ctx.clearRect(0,0,w,h);ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
 const grad=ctx.createLinearGradient(0,0,w,h);grad.addColorStop(0,'rgba(255,255,255,.20)');grad.addColorStop(.55,'rgba(255,255,255,.02)');grad.addColorStop(1,'rgba(0,0,0,.30)');ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
 if(style==='festive'){ctx.fillStyle='rgba(244,189,80,.16)';for(let k=0;k<22;k++){ctx.beginPath();ctx.arc((k*137)%w,(k*223)%h,w*.011,0,Math.PI*2);ctx.fill()}}
