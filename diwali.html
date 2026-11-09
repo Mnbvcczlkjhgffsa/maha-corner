@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#641515">
+<title>मराठी कॉर्नर | दिवाळीच्या हार्दिक शुभेच्छा</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;font-family:"Noto Sans Devanagari",Mangal,sans-serif;color:#fff5df;background:radial-gradient(circle at 50% 12%,#a94d17,#541313 48%,#190909)}
+.card{width:min(720px,100%);text-align:center;padding:40px 24px;border:1px solid #e9bd6b;border-radius:28px;background:linear-gradient(145deg,#5b1715ed,#210909f5);box-shadow:0 18px 70px #0009,inset 0 0 35px #ffbd4b18}
+.brand{font-size:clamp(30px,7vw,49px);font-weight:900;color:#ffdc88;text-shadow:0 0 18px #ffb52e88}.tag{font-size:14px;letter-spacing:2px;color:#f5c98a;margin-top:5px}
+.diya{font-size:65px;margin:24px 0 8px;filter:drop-shadow(0 0 14px #ffad32);animation:flicker 1.5s infinite alternate}
+h1{font-size:clamp(27px,6vw,44px);line-height:1.5;color:#ffe5a5;margin:8px 0 15px}
+p{font-size:clamp(17px,3.5vw,21px);line-height:1.9;max-width:570px;margin:auto;color:#fff3dc}
+hr{width:110px;border:0;height:2px;background:#ffd77c;margin:25px auto}.wish{font-size:19px;line-height:1.9;color:#ffd77c;font-weight:bold}.from{margin-top:25px;font-size:21px;font-weight:800;color:#ffe0a0}
+button{margin:25px 5px 0;border:0;border-radius:30px;padding:13px 22px;background:#ffd477;color:#4a160e;font-size:16px;font-weight:bold;cursor:pointer}.foot{margin-top:25px;color:#d7b88b;font-size:13px}
+.spark{position:fixed;top:-25px;color:#ffdb8b;pointer-events:none;animation:fall 7s linear infinite}@keyframes flicker{to{transform:scale(1.08);opacity:1}}@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
+</style></head>
+<body><main class="card">
+<div class="brand">मराठी कॉर्नर</div><div class="tag">माहिती अशी जी कामी येईल</div>
+<div class="diya">🪔</div><h1>दिवाळीच्या हार्दिक शुभेच्छा!</h1>
+<p>प्रकाशाचा सण आपल्या जीवनात सुख, शांती, आरोग्य आणि समृद्धी घेऊन येवो. आनंदाचे दीप प्रत्येकाच्या घरात उजळोत आणि आपल्या सर्वांच्या मनोकामना पूर्ण होवोत!</p>
+<hr><div class="wish">आपणास व आपल्या संपूर्ण परिवारास<br>दीपावलीच्या मंगलमय शुभेच्छा! ✨</div>
+<div class="from">आपलेच — मराठी कॉर्नर</div>
+<button onclick="share()">WhatsApp वर शेअर करा</button><div class="foot">© Marathi Corner</div>
+</main><script>
+function share(){let t="🪔 मराठी कॉर्नरकडून आपणास व आपल्या परिवारास दिवाळीच्या हार्दिक शुभेच्छा! ✨ "+location.href;if(navigator.share)navigator.share({title:"दिवाळीच्या शुभेच्छा | मराठी कॉर्नर",text:t,url:location.href});else window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank")}
+const a=["✦","✧","✨","❋"];for(let i=0;i<20;i++){let s=document.createElement("span");s.className="spark";s.textContent=a[i%4];s.style.left=Math.random()*100+"vw";s.style.animationDelay=Math.random()*7+"s";s.style.animationDuration=5+Math.random()*5+"s";document.body.appendChild(s)}
+</script></body></html>
