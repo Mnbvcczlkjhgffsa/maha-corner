@@ -131,7 +131,8 @@ textarea{min-height:100px}
 <script>
 const el=id=>document.getElementById(id),canvas=el('poster'),ctx=canvas.getContext('2d');let uploaded=null,logoImage=null;
 const STORAGE_KEY='mahaCornerTemplatesV1',LOGO_KEY='mahaCornerLogoV1';
-let contentLocked=false;\nfunction setContentLock(locked){contentLocked=locked;['title','message'].forEach(id=>{el(id).readOnly=locked;el(id).style.background=locked?'#f0f3f7':'#fff'});el('fixedInfo').style.display=locked?'block':'none';el('unlockContent').checked=!locked;}
+let contentLocked=false;
+function setContentLock(locked){contentLocked=locked;['title','message'].forEach(id=>{el(id).readOnly=locked;el(id).style.background=locked?'#f0f3f7':'#fff'});el('fixedInfo').style.display=locked?'block':'none';el('unlockContent').checked=!locked;}
 function applyPreset(p){el('title').value=p.title;el('message').value=p.message;el('bg').value=p.bg;el('fg').value=p.fg;el('designStyle').value=(p===presets.farmer||p===presets.farmerPro)?'farmer':'scheme';setContentLock(true);draw();}
 const presets={
 scheme:{title:'शासकीय योजनेची महत्त्वाची माहिती',message:'पात्र लाभार्थ्यांनी आवश्यक कागदपत्रांसह अर्ज करावा.\nयोजनेच्या अटी व पात्रता तपासूनच अर्ज करा.\nअधिकृत माहितीसाठी संबंधित शासकीय संकेतस्थळ पाहा.',bg:'#123c5a',fg:'#ffffff'},
@@ -223,7 +224,9 @@ el('closeCutter').addEventListener('click',()=>{cutterPanel.hidden=true;el('open
 el('cutterPdf').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(f.type!=='application/pdf'&&!f.name.toLowerCase().endsWith('.pdf')){alert('कृपया PDF फाइल निवडा.');e.target.value='';return}el('cutterStatus').textContent='PDF निवडली: '+f.name+' ('+(f.size/1024/1024).toFixed(2)+' MB). PDF मधील Front/Back पानांची रचना तपासून पुढील कटिंग पर्याय सक्रिय करायचे आहेत.';el('cutterPreview').innerHTML='<span>📄</span><strong>'+f.name.replace(/[&<>"]/g,'')+'</strong><small>PDF निवडली आहे. अद्याप कटिंग/प्रिंट PDF तयार झालेली नाही.</small>'});
 
 refreshTemplates();loadSavedLogo();
-['title','message','footerText','ownerName','businessPhone','bg','fg','format','designStyle'].forEach(id=>el(id).addEventListener('input',draw));\nel('unlockContent').addEventListener('change',e=>setContentLock(!e.target.checked));\nsetContentLock(false);
+['title','message','footerText','ownerName','businessPhone','bg','fg','format','designStyle'].forEach(id=>el(id).addEventListener('input',draw));
+el('unlockContent').addEventListener('change',e=>setContentLock(!e.target.checked));
+setContentLock(false);
 document.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>{const p=presets[btn.dataset.preset];applyPreset(p)}));
 el('photo').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(!f.type.startsWith('image/'))return alert('कृपया फोटो फाइल निवडा.');const img=new Image();img.onload=()=>{uploaded=img;draw()};img.onerror=()=>alert('फोटो उघडता आला नाही. दुसरी प्रतिमा निवडा.');img.src=URL.createObjectURL(f)});
 function generatePoster(){draw();el('previewStatus').textContent='पोस्टर तयार झाले ✓';el('poster').scrollIntoView({behavior:'smooth',block:'center'})}
