@@ -20,6 +20,17 @@ header{background:linear-gradient(125deg,#101d3b,#174b72 65%,#236783);color:#fff
 label{display:block;font-size:13px;font-weight:800;margin:13px 0 6px}input,textarea,select,button{font:inherit}input[type=text],textarea,select{width:100%;padding:11px 12px;border:1px solid #d7deea;border-radius:10px;background:#fff;color:var(--ink);outline:none}input:focus,textarea:focus,select:focus{border-color:#3679a6;box-shadow:0 0 0 3px #3679a61c}textarea{min-height:86px;resize:vertical;line-height:1.6}input[type=color]{width:100%;height:40px;border:0;background:none;cursor:pointer}input[type=file]{width:100%;font-size:12px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.presets{display:grid;grid-template-columns:1fr 1fr;gap:8px}.preset{padding:10px 8px;border:1px solid #dce4ee;background:#f7f9fc;color:#29445f;border-radius:10px;font-size:12px}.preset:hover{border-color:#d5a13d;background:#fff8e9}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}button{border:0;border-radius:11px;padding:12px 13px;font-weight:850;cursor:pointer;transition:transform .15s,filter .15s}button:active{transform:scale(.98)}.primary{background:linear-gradient(120deg,#f7cf70,#e9a92d);color:#182338;width:100%;margin-top:17px;box-shadow:0 5px 14px #e9a92d40}.secondary{background:#eaf0f6;color:var(--navy)}.help{font-size:11px;line-height:1.65;color:#758196;margin:13px 0 0}
 .stage{display:flex;flex-direction:column;align-items:center;min-height:540px}.stage-top{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px}.stage-top h2{margin:0}.preview-note{font-size:11px;color:#778397}.canvas-wrap{width:min(100%,590px);padding:8px;background:#eef1f6;border-radius:13px}.stage canvas{display:block;width:100%;height:auto;border-radius:7px;background:#fff;box-shadow:0 8px 28px #0002}
+
+.tool-launch,.cutter-panel{max-width:1240px;margin:0 auto 20px;padding:0 18px}
+.tool-card{width:100%;display:flex;align-items:center;gap:14px;text-align:left;padding:17px 19px;border:1px solid #d9e2ef;border-radius:17px;background:linear-gradient(110deg,#fff,#f2f6fb);box-shadow:0 8px 24px #15243a12;color:var(--navy)}
+.tool-icon{width:52px;height:52px;display:grid;place-items:center;border-radius:15px;background:#fff0cf;font-size:28px;flex-shrink:0}
+.tool-card strong{display:block;font-size:18px}.tool-card small{display:block;color:#69788e;font-size:12px;margin-top:3px}.tool-card>b{margin-left:auto;color:#9b6814;white-space:nowrap}
+.cutter-panel{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:20px;box-shadow:0 9px 30px #15243a12}
+.cutter-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}.cutter-heading h2{margin:4px 0;color:var(--navy)}.cutter-heading p{margin:0;color:#69788e;font-size:13px}.cutter-kicker{font-size:10px;font-weight:900;letter-spacing:1.5px;color:#a56e17}
+.cutter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px;margin-top:16px}.cutter-notice{margin-top:15px;padding:12px;border-radius:10px;background:#fff7e7;color:#745019;font-size:13px;line-height:1.6}
+.cutter-preview{min-height:125px;margin-top:14px;border:2px dashed #d8e0eb;border-radius:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#68778d;text-align:center;padding:15px}.cutter-preview span{font-size:27px}.cutter-preview strong{color:#243b58}.cutter-preview small{font-size:11px}
+@media(max-width:600px){.tool-launch,.cutter-panel{padding-left:14px;padding-right:14px}.tool-card{padding:13px;gap:10px}.tool-card strong{font-size:16px}.tool-card small{max-width:190px}.tool-card>b{font-size:12px}.cutter-panel{padding:15px}.cutter-grid{grid-template-columns:1fr}.cutter-heading{align-items:flex-start}.cutter-heading button{min-width:84px;padding:9px}}
+
 footer{text-align:center;color:#778397;padding:22px 15px;font-size:12px}footer strong{color:#314c69}
 .mobile-actions{display:none}
 button,input,select,textarea{touch-action:manipulation}
@@ -58,6 +69,24 @@ textarea{min-height:100px}
  </div>
 </section>
 
+
+<section class="tool-launch" aria-label="विशेष साधने">
+  <button class="tool-card" id="openCutter" type="button">
+    <span class="tool-icon">✂️</span><span><strong>कटर (CUTTER)</strong><small>PDF कार्ड कटिंग आणि प्रिंट शीट तयार करा</small></span><b>उघडा →</b>
+  </button>
+</section>
+<section class="cutter-panel" id="cutterPanel" hidden>
+  <div class="cutter-heading"><div><span class="cutter-kicker">SPECIAL TOOL</span><h2>✂️ कार्ड कटर</h2><p>PDF अपलोड करून कार्डची मांडणी आणि प्रिंट सेटिंग निवडा.</p></div><button class="secondary" id="closeCutter" type="button">✕ बंद करा</button></div>
+  <div class="cutter-grid">
+    <div><label for="cutterPdf">PDF फाइल अपलोड करा</label><input id="cutterPdf" type="file" accept="application/pdf,.pdf"><p class="help">फाइल या डिव्हाइसवरच प्रक्रिया करण्यासाठी निवडली जाईल.</p></div>
+    <div><label for="cutterPaper">शीटचा आकार</label><select id="cutterPaper"><option value="A4">A4 शीट</option><option value="4x6">4 × 6 इंच शीट</option></select></div>
+    <div><label for="cutterSides">PDF मधील कार्ड बाजू</label><select id="cutterSides"><option value="frontback">पहिले पान Front, दुसरे पान Back</option><option value="single">एकाच पानावर Front आणि Back</option><option value="front">फक्त Front</option><option value="back">फक्त Back</option></select></div>
+    <div><label for="cutterCopies">प्रतींची संख्या</label><input id="cutterCopies" type="number" min="1" max="20" value="1"></div>
+  </div>
+  <div class="cutter-notice" id="cutterStatus" role="status">PDF निवडल्यानंतर कार्डची रचना तपासता येईल. योग्य Front/Back मांडणीसाठी मूळ PDF ची रचना आवश्यक आहे.</div>
+  <div class="cutter-preview" id="cutterPreview"><span>📄</span><strong>PDF प्रिव्ह्यू येथे दिसेल</strong><small>PDF अपलोड केल्यानंतर पुढील कटिंग/प्रिंट प्रक्रिया येथे दाखवली जाईल.</small></div>
+  <p class="help">टीप: आधार किंवा इतर ओळखपत्राची प्रत फक्त वैध कारणासाठी आणि संबंधित व्यक्तीच्या संमतीनेच वापरा. पासवर्ड/OTP कोणाशीही शेअर करू नका.</p>
+</section>
 <main class="layout">
 <section class="panel">
 <h2>🎨 पोस्टर एडिटर</h2>
@@ -144,6 +173,12 @@ el('loadTemplate').addEventListener('click',()=>{const name=el('savedTemplates')
 el('deleteTemplate').addEventListener('click',()=>{const name=el('savedTemplates').value;if(!name)return alert('हटवण्यासाठी टेम्पलेट निवडा.');if(!confirm('हे टेम्पलेट हटवायचे आहे का?'))return;const data=readTemplates();delete data[name];localStorage.setItem(STORAGE_KEY,JSON.stringify(data));refreshTemplates();});
 function loadSavedLogo(){const src=localStorage.getItem(LOGO_KEY);if(!src)return;const im=new Image();im.onload=()=>{logoImage=im;draw()};im.src=src}
 el('logoUpload').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(!f.type.startsWith('image/'))return alert('कृपया लोगोची image फाइल निवडा.');if(f.size>1500000)return alert('लोगो फाइल 1.5 MB पेक्षा कमी असावी.');const reader=new FileReader();reader.onload=()=>{try{localStorage.setItem(LOGO_KEY,reader.result);const im=new Image();im.onload=()=>{logoImage=im;draw();alert('लोगो या ब्राउझरमध्ये सेव्ह झाला!')};im.src=reader.result}catch(err){alert('लोगो सेव्ह झाला नाही. दुसरी छोटी फाइल वापरा.')}};reader.readAsDataURL(f)});
+
+const cutterPanel=el('cutterPanel');
+el('openCutter').addEventListener('click',()=>{cutterPanel.hidden=false;cutterPanel.scrollIntoView({behavior:'smooth',block:'start'})});
+el('closeCutter').addEventListener('click',()=>{cutterPanel.hidden=true;el('openCutter').scrollIntoView({behavior:'smooth',block:'center'})});
+el('cutterPdf').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(f.type!=='application/pdf'&&!f.name.toLowerCase().endsWith('.pdf')){alert('कृपया PDF फाइल निवडा.');e.target.value='';return}el('cutterStatus').textContent='PDF निवडली: '+f.name+' ('+(f.size/1024/1024).toFixed(2)+' MB). PDF मधील Front/Back पानांची रचना तपासून पुढील कटिंग पर्याय सक्रिय करायचे आहेत.';el('cutterPreview').innerHTML='<span>📄</span><strong>'+f.name.replace(/[&<>"]/g,'')+'</strong><small>PDF निवडली आहे. अद्याप कटिंग/प्रिंट PDF तयार झालेली नाही.</small>'});
+
 refreshTemplates();loadSavedLogo();
 ['title','message','footerText','bg','fg','format','designStyle'].forEach(id=>el(id).addEventListener('input',draw));
 document.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>{const p=presets[btn.dataset.preset];el('title').value=p.title;el('message').value=p.message;el('bg').value=p.bg;el('fg').value=p.fg;draw()}));
