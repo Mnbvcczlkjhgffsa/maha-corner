@@ -130,7 +130,9 @@ textarea{min-height:100px}
 <footer>© 2026 <strong>महा कॉर्नर</strong> • मराठी पोस्टर मेकर</footer>
 <script>
 const el=id=>document.getElementById(id),canvas=el('poster'),ctx=canvas.getContext('2d');let uploaded=null,logoImage=null;
-const STORAGE_KEY='mahaCornerTemplatesV1',LOGO_KEY='mahaCornerLogoV1';\nlet contentLocked=false;\nfunction setContentLock(locked){contentLocked=locked;['title','message'].forEach(id=>{el(id).readOnly=locked;el(id).style.background=locked?'#f0f3f7':'#fff'});el('fixedInfo').style.display=locked?'block':'none';el('unlockContent').checked=!locked;}\nfunction applyPreset(p){el('title').value=p.title;el('message').value=p.message;el('bg').value=p.bg;el('fg').value=p.fg;el('designStyle').value=(p===presets.farmer||p===presets.farmerPro)?'farmer':'scheme';setContentLock(true);draw();}
+const STORAGE_KEY='mahaCornerTemplatesV1',LOGO_KEY='mahaCornerLogoV1';
+let contentLocked=false;\nfunction setContentLock(locked){contentLocked=locked;['title','message'].forEach(id=>{el(id).readOnly=locked;el(id).style.background=locked?'#f0f3f7':'#fff'});el('fixedInfo').style.display=locked?'block':'none';el('unlockContent').checked=!locked;}
+function applyPreset(p){el('title').value=p.title;el('message').value=p.message;el('bg').value=p.bg;el('fg').value=p.fg;el('designStyle').value=(p===presets.farmer||p===presets.farmerPro)?'farmer':'scheme';setContentLock(true);draw();}
 const presets={
 scheme:{title:'शासकीय योजनेची महत्त्वाची माहिती',message:'पात्र लाभार्थ्यांनी आवश्यक कागदपत्रांसह अर्ज करावा.\nयोजनेच्या अटी व पात्रता तपासूनच अर्ज करा.\nअधिकृत माहितीसाठी संबंधित शासकीय संकेतस्थळ पाहा.',bg:'#123c5a',fg:'#ffffff'},
 farmer:{title:'शेतकरी बांधवांसाठी महत्त्वाची सूचना',message:'शेतीविषयक महत्त्वाची माहिती येथे वाचा.\nअर्ज करण्यापूर्वी पात्रता व कागदपत्रे तपासा.\nअधिक माहितीसाठी संपर्क साधा.',bg:'#174b35',fg:'#ffffff'},
