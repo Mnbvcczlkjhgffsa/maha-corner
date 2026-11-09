@@ -35,6 +35,9 @@ footer{text-align:center;color:#778397;padding:22px 15px;font-size:12px}footer s
 <button class="preset" data-preset="job">💼 नोकरी अपडेट</button>
 <button class="preset" data-preset="ad">📢 जाहिरात</button>
 </div>
+<label for="savedTemplates">माझे सेव्ह केलेले टेम्पलेट</label>
+<div class="row"><select id="savedTemplates"><option value="">टेम्पलेट निवडा</option></select><button class="secondary" id="loadTemplate" type="button">लोड करा</button></div>
+<div class="actions"><button class="secondary" id="saveTemplate" type="button">★ टेम्पलेट सेव्ह</button><button class="secondary" id="deleteTemplate" type="button">टेम्पलेट हटवा</button></div>
 <label for="title">मुख्य शीर्षक</label><input id="title" type="text" value="महत्त्वाची सूचना">
 <label for="message">पोस्टरवरील मजकूर</label><textarea id="message">आपली माहिती येथे लिहा.\nमहत्त्वाचे मुद्दे सोप्या भाषेत मांडा.\nअधिक माहितीसाठी संपर्क साधा.</textarea>
 <label for="footerText">खालील नाव / संपर्क</label><input id="footerText" type="text" value="महा कॉर्नर">
@@ -42,7 +45,9 @@ footer{text-align:center;color:#778397;padding:22px 15px;font-size:12px}footer s
 <div><label for="bg">पार्श्वभूमीचा रंग</label><input id="bg" type="color" value="#123c5a"></div>
 <div><label for="fg">मजकुराचा रंग</label><input id="fg" type="color" value="#ffffff"></div>
 </div>
-<label for="photo">स्वतःचा फोटो / लोगो (ऐच्छिक)</label><input id="photo" type="file" accept="image/*">
+<label for="photo">पोस्टरमधील फोटो (ऐच्छिक)</label><input id="photo" type="file" accept="image/*">
+<label for="logoUpload">तुमचा लोगो अपलोड करा (एकदा सेव्ह करा)</label><input id="logoUpload" type="file" accept="image/*">
+<p class="help">लोगो या ब्राउझरमध्ये सेव्ह राहील. त्याच मोबाईल/ब्राउझरमध्ये पुढच्या वेळी पुन्हा अपलोड करावा लागणार नाही.</p>
 <label for="format">पोस्टरचा आकार</label><select id="format"><option value="1080,1350">Instagram पोस्ट – 4:5</option><option value="1080,1080">चौरस पोस्ट – 1:1</option><option value="1080,1920">WhatsApp Status – 9:16</option><option value="1920,1080">Landscape – 16:9</option></select>
 <button class="primary" id="download">⬇ HD पोस्टर डाउनलोड करा</button>
 <div class="actions"><button class="secondary" id="reset">रीसेट करा</button><button class="secondary" id="share">शेअर करा</button></div>
@@ -52,7 +57,7 @@ footer{text-align:center;color:#778397;padding:22px 15px;font-size:12px}footer s
 </main>
 <footer>© 2026 <strong>महा कॉर्नर</strong> • मराठी पोस्टर मेकर</footer>
 <script>
-const el=id=>document.getElementById(id),canvas=el('poster'),ctx=canvas.getContext('2d');let uploaded=null;
+const el=id=>document.getElementById(id),canvas=el('poster'),ctx=canvas.getContext('2d');let uploaded=null,logoImage=null;\nconst STORAGE_KEY='mahaCornerTemplatesV1',LOGO_KEY='mahaCornerLogoV1';
 const presets={
 scheme:{title:'शासकीय योजनेची महत्त्वाची माहिती',message:'पात्र लाभार्थ्यांनी आवश्यक कागदपत्रांसह अर्ज करावा.\nयोजनेच्या अटी व पात्रता तपासूनच अर्ज करा.\nअधिकृत माहितीसाठी संबंधित शासकीय संकेतस्थळ पाहा.',bg:'#123c5a',fg:'#ffffff'},
 farmer:{title:'शेतकरी बांधवांसाठी महत्त्वाची सूचना',message:'शेतीविषयक महत्त्वाची माहिती येथे वाचा.\nअर्ज करण्यापूर्वी पात्रता व कागदपत्रे तपासा.\nअधिक माहितीसाठी संपर्क साधा.',bg:'#174b35',fg:'#ffffff'},
@@ -67,12 +72,24 @@ if(uploaded){const maxW=w*.7,maxH=h*.27,s=Math.min(maxW/uploaded.width,maxH/uplo
 ctx.strokeStyle='#f4bd50';ctx.lineWidth=Math.max(6,w*.008);ctx.strokeRect(w*.035,h*.025,w*.93,h*.95);
 ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=Math.max(2,w*.002);ctx.strokeRect(w*.052,h*.042,w*.896,h*.916);
 ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#f4bd50';ctx.font='800 '+(w*.035)+'px system-ui,"Noto Sans Devanagari",sans-serif';ctx.fillText('महा कॉर्नर',w/2,h*.095);
+if(logoImage){const max= Math.min(w*.15,h*.09),s=Math.min(max/logoImage.width,max/logoImage.height),lw=logoImage.width*s,lh=logoImage.height*s;ctx.drawImage(logoImage,w*.08,h*.055,lw,lh);}
 const hasPhoto=!!uploaded;const titleFont='800 '+(w*.067)+'px system-ui,"Noto Sans Devanagari",sans-serif';const titleLines=wrapLines(el('title').value,w*.82,titleFont);ctx.font=titleFont;ctx.fillStyle=fg;ctx.shadowColor='rgba(0,0,0,.35)';ctx.shadowBlur=w*.012;ctx.shadowOffsetY=w*.004;let y=hasPhoto?h*.53:h*.34;const titleStep=w*.085;titleLines.slice(0,4).forEach(t=>{ctx.fillText(t,w/2,y);y+=titleStep});ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.shadowOffsetY=0;
 y+=h*.035;const bodyFont='500 '+(w*.036)+'px system-ui,"Noto Sans Devanagari",sans-serif';const bodyLines=wrapLines(el('message').value,w*.78,bodyFont);ctx.font=bodyFont;ctx.fillStyle=fg;const maxBody=hasPhoto?7:10;bodyLines.slice(0,maxBody).forEach(t=>{ctx.fillText(t,w/2,y);y+=w*.055});
 const lineY=h*.83;ctx.fillStyle='#f4bd50';ctx.fillRect(w*.19,lineY,w*.62,Math.max(4,h*.004));ctx.fillStyle=fg;ctx.font='750 '+(w*.042)+'px system-ui,"Noto Sans Devanagari",sans-serif';ctx.fillText(el('footerText').value,w/2,h*.89);
 ctx.font='500 '+(w*.018)+'px system-ui';ctx.fillStyle='rgba(255,255,255,.78)';ctx.fillText('माहिती अशी जी कामी येईल',w/2,h*.94);
 }
-['title','message','footerText','bg','fg','format'].forEach(id=>el(id).addEventListener('input',draw));
+
+function readTemplates(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')}catch(e){return {}}}
+function refreshTemplates(selected){const data=readTemplates(),sel=el('savedTemplates');sel.innerHTML='<option value="">टेम्पलेट निवडा</option>';Object.keys(data).sort().forEach(name=>{const o=document.createElement('option');o.value=name;o.textContent=name;sel.appendChild(o)});if(selected&&data[selected])sel.value=selected}
+function currentDesign(){return {title:el('title').value,message:el('message').value,footerText:el('footerText').value,bg:el('bg').value,fg:el('fg').value,format:el('format').value}}
+function applyDesign(d){['title','message','footerText','bg','fg','format'].forEach(k=>{if(d[k]!==undefined)el(k).value=d[k]});draw()}
+el('saveTemplate').addEventListener('click',()=>{const name=prompt('या टेम्पलेटला नाव द्या (उदा. खरीप हंगाम सूचना):');if(!name||!name.trim())return;const data=readTemplates();data[name.trim()]=currentDesign();try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));refreshTemplates(name.trim());alert('तुमचे टेम्पलेट या ब्राउझरमध्ये सेव्ह झाले!')}catch(e){alert('ब्राउझर स्टोरेज भरले आहे. काही जुनी टेम्पलेट हटवा.')}});
+el('loadTemplate').addEventListener('click',()=>{const name=el('savedTemplates').value,data=readTemplates();if(!name||!data[name])return alert('कृपया सेव्ह केलेले टेम्पलेट निवडा.');applyDesign(data[name])});
+el('deleteTemplate').addEventListener('click',()=>{const name=el('savedTemplates').value;if(!name)return alert('हटवण्यासाठी टेम्पलेट निवडा.');if(!confirm('हे टेम्पलेट हटवायचे आहे का?'))return;const data=readTemplates();delete data[name];localStorage.setItem(STORAGE_KEY,JSON.stringify(data));refreshTemplates();});
+function loadSavedLogo(){const src=localStorage.getItem(LOGO_KEY);if(!src)return;const im=new Image();im.onload=()=>{logoImage=im;draw()};im.src=src}
+el('logoUpload').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(!f.type.startsWith('image/'))return alert('कृपया लोगोची image फाइल निवडा.');if(f.size>1500000)return alert('लोगो फाइल 1.5 MB पेक्षा कमी असावी.');const reader=new FileReader();reader.onload=()=>{try{localStorage.setItem(LOGO_KEY,reader.result);const im=new Image();im.onload=()=>{logoImage=im;draw();alert('लोगो या ब्राउझरमध्ये सेव्ह झाला!')};im.src=reader.result}catch(err){alert('लोगो सेव्ह झाला नाही. दुसरी छोटी फाइल वापरा.')}};reader.readAsDataURL(f)});
+refreshTemplates();loadSavedLogo();
+\n['title','message','footerText','bg','fg','format'].forEach(id=>el(id).addEventListener('input',draw));
 document.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>{const p=presets[btn.dataset.preset];el('title').value=p.title;el('message').value=p.message;el('bg').value=p.bg;el('fg').value=p.fg;draw()}));
 el('photo').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(!f.type.startsWith('image/'))return alert('कृपया फोटो फाइल निवडा.');const img=new Image();img.onload=()=>{uploaded=img;draw()};img.onerror=()=>alert('फोटो उघडता आला नाही. दुसरी प्रतिमा निवडा.');img.src=URL.createObjectURL(f)});
 el('download').addEventListener('click',()=>{draw();const a=document.createElement('a');a.download='maha-corner-poster.png';a.href=canvas.toDataURL('image/png');a.click()});
