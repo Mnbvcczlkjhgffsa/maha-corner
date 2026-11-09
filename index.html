@@ -21,8 +21,13 @@ label{display:block;font-size:13px;font-weight:800;margin:13px 0 6px}input,texta
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.presets{display:grid;grid-template-columns:1fr 1fr;gap:8px}.preset{padding:10px 8px;border:1px solid #dce4ee;background:#f7f9fc;color:#29445f;border-radius:10px;font-size:12px}.preset:hover{border-color:#d5a13d;background:#fff8e9}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}button{border:0;border-radius:11px;padding:12px 13px;font-weight:850;cursor:pointer;transition:transform .15s,filter .15s}button:active{transform:scale(.98)}.primary{background:linear-gradient(120deg,#f7cf70,#e9a92d);color:#182338;width:100%;margin-top:17px;box-shadow:0 5px 14px #e9a92d40}.secondary{background:#eaf0f6;color:var(--navy)}.help{font-size:11px;line-height:1.65;color:#758196;margin:13px 0 0}
 .stage{display:flex;flex-direction:column;align-items:center;min-height:540px}.stage-top{width:100%;display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px}.stage-top h2{margin:0}.preview-note{font-size:11px;color:#778397}.canvas-wrap{width:min(100%,590px);padding:8px;background:#eef1f6;border-radius:13px}.stage canvas{display:block;width:100%;height:auto;border-radius:7px;background:#fff;box-shadow:0 8px 28px #0002}
 footer{text-align:center;color:#778397;padding:22px 15px;font-size:12px}footer strong{color:#314c69}
-@media(max-width:850px){.layout{grid-template-columns:1fr}.stage{min-height:0}.hero{margin-top:22px}header{padding:14px 5%}.panel{padding:17px}}
-@media(max-width:420px){.head-tag{font-size:11px}.row{gap:8px}.panel{padding:14px}.stage{padding:14px}}
+.mobile-actions{display:none}
+button,input,select,textarea{touch-action:manipulation}
+button{min-height:44px}
+input[type=text],select{min-height:44px}
+textarea{min-height:100px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.stage{min-height:0}.hero{margin-top:22px}header{padding:14px 5%}.panel{padding:17px}.mobile-actions{position:fixed;z-index:50;left:0;right:0;bottom:0;display:grid;grid-template-columns:1.2fr 1fr;gap:10px;padding:10px max(12px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));background:#101d3bf2;box-shadow:0 -5px 22px #101d3b30}.mobile-actions button{margin:0;min-height:48px;border-radius:12px}.mobile-actions button:first-child{background:linear-gradient(120deg,#f7cf70,#e9a92d);color:#182338}.mobile-actions button:last-child{background:#fff;color:#101d3b}body{padding-bottom:82px}}
+@media(max-width:420px){.head-tag{font-size:11px}.row{grid-template-columns:1fr;gap:8px}.panel{padding:14px}.stage{padding:14px}.hero{padding:0 14px}.hero h1{font-size:27px}.canvas-wrap{padding:5px}}
 </style>
 </head>
 <body>
@@ -62,6 +67,7 @@ footer{text-align:center;color:#778397;padding:22px 15px;font-size:12px}footer s
 </section>
 <section class="stage"><div class="stage-top"><h2>लाईव्ह प्रिव्ह्यू</h2><span class="preview-note" id="previewStatus" role="status">पोस्टर तयार आहे</span></div><div class="canvas-wrap"><canvas id="poster" width="1080" height="1350"></canvas></div></section>
 </main>
+<div class="mobile-actions" aria-label="पोस्टर कृती"><button type="button" id="mobileGenerate">✨ पोस्टर तयार करा</button><button type="button" id="mobileDownload">⬇ डाउनलोड</button></div>
 <footer>© 2026 <strong>महा कॉर्नर</strong> • मराठी पोस्टर मेकर</footer>
 <script>
 const el=id=>document.getElementById(id),canvas=el('poster'),ctx=canvas.getContext('2d');let uploaded=null,logoImage=null;
@@ -117,8 +123,12 @@ refreshTemplates();loadSavedLogo();
 ['title','message','footerText','bg','fg','format','designStyle'].forEach(id=>el(id).addEventListener('input',draw));
 document.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>{const p=presets[btn.dataset.preset];el('title').value=p.title;el('message').value=p.message;el('bg').value=p.bg;el('fg').value=p.fg;draw()}));
 el('photo').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(!f.type.startsWith('image/'))return alert('कृपया फोटो फाइल निवडा.');const img=new Image();img.onload=()=>{uploaded=img;draw()};img.onerror=()=>alert('फोटो उघडता आला नाही. दुसरी प्रतिमा निवडा.');img.src=URL.createObjectURL(f)});
-el('generate').addEventListener('click',()=>{draw();el('previewStatus').textContent='पोस्टर तयार झाले ✓';el('poster').scrollIntoView({behavior:'smooth',block:'center'})});
-el('download').addEventListener('click',()=>{try{draw();const a=document.createElement('a');a.download='maha-corner-poster.png';a.href=canvas.toDataURL('image/png');a.click()}catch(err){alert('पोस्टर डाउनलोड होत नाही. कृपया पुन्हा प्रयत्न करा किंवा फोटोची दुसरी फाइल वापरा.')}});
+function generatePoster(){draw();el('previewStatus').textContent='पोस्टर तयार झाले ✓';el('poster').scrollIntoView({behavior:'smooth',block:'center'})}
+el('generate').addEventListener('click',generatePoster);
+el('mobileGenerate').addEventListener('click',generatePoster);
+function downloadPoster(){try{draw();const a=document.createElement('a');a.download='maha-corner-poster.png';a.href=canvas.toDataURL('image/png');a.click()}catch(err){alert('पोस्टर डाउनलोड होत नाही. कृपया पुन्हा प्रयत्न करा किंवा फोटोची दुसरी फाइल वापरा.')}}
+el('download').addEventListener('click',downloadPoster);
+el('mobileDownload').addEventListener('click',downloadPoster);
 el('share').addEventListener('click',async()=>{draw();if(!navigator.share){alert('या ब्राउझरमध्ये थेट शेअर उपलब्ध नाही. पोस्टर डाउनलोड करून WhatsApp वर पाठवा.');return}try{const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));const file=new File([blob],'maha-corner-poster.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[file]}))await navigator.share({files:[file],title:'महा कॉर्नर पोस्टर'});else await navigator.share({title:'महा कॉर्नर पोस्टर',text:'महा कॉर्नरवर तयार केलेले पोस्टर'})}catch(e){}});
 el('reset').addEventListener('click',()=>{uploaded=null;el('photo').value='';el('title').value='महत्त्वाची सूचना';el('message').value='आपली माहिती येथे लिहा.\nमहत्त्वाचे मुद्दे सोप्या भाषेत मांडा.\nअधिक माहितीसाठी संपर्क साधा.';el('footerText').value='महा कॉर्नर';el('bg').value='#123c5a';el('fg').value='#ffffff';el('format').value='1080,1350';el('designStyle').value='premium';draw()});draw();
 </script>
