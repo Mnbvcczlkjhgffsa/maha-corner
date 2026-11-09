@@ -31,6 +31,7 @@ label{display:block;font-size:13px;font-weight:800;margin:13px 0 6px}input,texta
 .cutter-preview{min-height:125px;margin-top:14px;border:2px dashed #d8e0eb;border-radius:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#68778d;text-align:center;padding:15px}.cutter-preview span{font-size:27px}.cutter-preview strong{color:#243b58}.cutter-preview small{font-size:11px}
 @media(max-width:600px){.tool-launch,.cutter-panel{padding-left:14px;padding-right:14px}.tool-card{padding:13px;gap:10px}.tool-card strong{font-size:16px}.tool-card small{max-width:190px}.tool-card>b{font-size:12px}.cutter-panel{padding:15px}.cutter-grid{grid-template-columns:1fr}.cutter-heading{align-items:flex-start}.cutter-heading button{min-width:84px;padding:9px}}
 
+.fixed-info{margin-top:14px;padding:11px;border-radius:10px;background:#eaf5ee;color:#145b35;font-size:12px;line-height:1.55}.fixed-info strong,.fixed-info span{display:block}.unlock-row{display:flex;align-items:center;gap:8px;padding:10px;background:#fff6e5;border-radius:9px}.unlock-row input{width:18px;height:18px;flex-shrink:0}
 footer{text-align:center;color:#778397;padding:22px 15px;font-size:12px}footer strong{color:#314c69}
 .mobile-actions{display:none}
 button,input,select,textarea{touch-action:manipulation}
@@ -104,7 +105,11 @@ textarea{min-height:100px}
 <label for="message">पोस्टरवरील मजकूर</label><textarea id="message">आपली माहिती येथे लिहा.
 महत्त्वाचे मुद्दे सोप्या भाषेत मांडा.
 अधिक माहितीसाठी संपर्क साधा.</textarea>
-<label for="footerText">खालील नाव / संपर्क</label><input id="footerText" type="text" value="महा कॉर्नर">
+<div class="fixed-info" id="fixedInfo"><strong>🔒 पोस्टरची मुख्य माहिती लॉक</strong><span>योजनेचा मजकूर बदलणार नाही. फक्त खालील व्यवसायाची माहिती भरा.</span></div>
+<label for="footerText">दुकान / व्यवसायाचे नाव</label><input id="footerText" type="text" value="आपल्या दुकानाचे नाव" placeholder="दुकान / व्यवसायाचे नाव">
+<label for="ownerName">मालक / संपर्क व्यक्तीचे नाव</label><input id="ownerName" type="text" value="" placeholder="व्यक्तीचे नाव">
+<label for="businessPhone">मोबाईल नंबर</label><input id="businessPhone" type="text" inputmode="numeric" maxlength="10" value="" placeholder="10 अंकी मोबाईल नंबर">
+<label class="unlock-row"><input id="unlockContent" type="checkbox"> मुख्य शीर्षक व योजनेची माहिती संपादित करण्याची परवानगी द्या</label>
 <div class="row">
 <div><label for="bg">पार्श्वभूमीचा रंग</label><input id="bg" type="color" value="#123c5a"></div>
 <div><label for="fg">मजकुराचा रंग</label><input id="fg" type="color" value="#ffffff"></div>
@@ -125,7 +130,7 @@ textarea{min-height:100px}
 <footer>© 2026 <strong>महा कॉर्नर</strong> • मराठी पोस्टर मेकर</footer>
 <script>
 const el=id=>document.getElementById(id),canvas=el('poster'),ctx=canvas.getContext('2d');let uploaded=null,logoImage=null;
-const STORAGE_KEY='mahaCornerTemplatesV1',LOGO_KEY='mahaCornerLogoV1';
+const STORAGE_KEY='mahaCornerTemplatesV1',LOGO_KEY='mahaCornerLogoV1';\nlet contentLocked=false;\nfunction setContentLock(locked){contentLocked=locked;['title','message'].forEach(id=>{el(id).readOnly=locked;el(id).style.background=locked?'#f0f3f7':'#fff'});el('fixedInfo').style.display=locked?'block':'none';el('unlockContent').checked=!locked;}\nfunction applyPreset(p){el('title').value=p.title;el('message').value=p.message;el('bg').value=p.bg;el('fg').value=p.fg;el('designStyle').value=(p===presets.farmer||p===presets.farmerPro)?'farmer':'scheme';setContentLock(true);draw();}
 const presets={
 scheme:{title:'शासकीय योजनेची महत्त्वाची माहिती',message:'पात्र लाभार्थ्यांनी आवश्यक कागदपत्रांसह अर्ज करावा.\nयोजनेच्या अटी व पात्रता तपासूनच अर्ज करा.\nअधिकृत माहितीसाठी संबंधित शासकीय संकेतस्थळ पाहा.',bg:'#123c5a',fg:'#ffffff'},
 farmer:{title:'शेतकरी बांधवांसाठी महत्त्वाची सूचना',message:'शेतीविषयक महत्त्वाची माहिती येथे वाचा.\nअर्ज करण्यापूर्वी पात्रता व कागदपत्रे तपासा.\nअधिक माहितीसाठी संपर्क साधा.',bg:'#174b35',fg:'#ffffff'},
@@ -140,7 +145,7 @@ const catSelect=el('libraryCategory'),itemSelect=el('libraryTemplate');
 posterLibrary.forEach((cat,i)=>{const o=document.createElement('option');o.value=i;o.textContent=cat[0];catSelect.appendChild(o)});
 function fillPosterLibrary(){itemSelect.innerHTML='<option value="">पोस्टर निवडा</option>';const cat=posterLibrary[Number(catSelect.value)];if(!cat)return;cat[1].forEach((title,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(i+1)+'. '+title;itemSelect.appendChild(o)})}
 catSelect.addEventListener('change',fillPosterLibrary);
-el('applyLibrary').addEventListener('click',()=>{const cat=posterLibrary[Number(catSelect.value)],i=Number(itemSelect.value);if(!cat||itemSelect.value==='')return alert('कृपया विभाग आणि पोस्टर नमुना निवडा.');el('title').value=cat[1][i];el('message').value=cat[2];el('bg').value=['#123c5a','#174b35','#263b70','#742e37','#573d78','#285b62','#754a27','#343b50','#5b3a42','#244f70'][i%10];el('fg').value='#ffffff';draw()});
+el('applyLibrary').addEventListener('click',()=>{const cat=posterLibrary[Number(catSelect.value)],i=Number(itemSelect.value);if(!cat||itemSelect.value==='')return alert('कृपया विभाग आणि पोस्टर नमुना निवडा.');el('title').value=cat[1][i];el('message').value=cat[2];el('bg').value=['#123c5a','#174b35','#263b70','#742e37','#573d78','#285b62','#754a27','#343b50','#5b3a42','#244f70'][i%10];el('fg').value='#ffffff';el('designStyle').value=(Number(catSelect.value)===1)?'farmer':'scheme';setContentLock(true);draw()});
 function wrapLines(text,max,font){ctx.font=font;const out=[];String(text).split('\n').forEach(p=>{let line='';p.split(/\s+/).forEach(word=>{const test=line?line+' '+word:word;if(line&&ctx.measureText(test).width>max){out.push(line);line=word}else line=test});if(line)out.push(line)});return out}
 function roundedBox(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=5;ctx.stroke()}}
 function drawFeaturePoster(w,h,bg,fg,style){
@@ -171,7 +176,7 @@ function drawFeaturePoster(w,h,bg,fg,style){
  lines.forEach((line,i)=>{ctx.fillStyle=i===0?green:'#182b24';ctx.fillText((i===0?'• ':'')+line,w*.09,by);by+=step});
  ctx.fillStyle=style==='farmer'?'#075b32':'#6b3516';ctx.fillRect(0,h*.88,w,h*.12);
  ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='800 '+(w*.036)+'px system-ui,"Noto Sans Devanagari",sans-serif';
- ctx.fillText(el('footerText').value,w/2,h*.925);
+ ctx.font='800 '+(w*.032)+'px system-ui,\"Noto Sans Devanagari\",sans-serif';ctx.fillText(el('footerText').value,w/2,h*.915);ctx.font='650 '+(w*.025)+'px system-ui,\"Noto Sans Devanagari\",sans-serif';if(el('ownerName').value)ctx.fillText('संपर्क: '+el('ownerName').value,w/2,h*.948);if(el('businessPhone').value)ctx.fillText('मो. '+el('businessPhone').value,w/2,h*.978);
  ctx.fillStyle='#ffe7a2';ctx.font='600 '+(w*.021)+'px system-ui,"Noto Sans Devanagari",sans-serif';ctx.fillText('अधिकृत माहिती तपासूनच पुढील कार्यवाही करा',w/2,h*.965);
  if(logoImage){const max=w*.10,s=Math.min(max/logoImage.width,max/logoImage.height);ctx.drawImage(logoImage,w*.84,h*.035,logoImage.width*s,logoImage.height*s)}
 }
@@ -195,15 +200,15 @@ let y=titleTop;const titleStep=w*.073;titleLines.forEach(line=>{ctx.fillText(lin
 let bodyY=y+h*.025;const footerTop=h*.84;let bodyFontSize=w*.033,bodyLines=[];
 for(let attempt=0;attempt<4;attempt++){const bodyFont='500 '+bodyFontSize+'px system-ui,"Noto Sans Devanagari",sans-serif';bodyLines=wrapLines(el('message').value,w*.78,bodyFont);const lineStep=bodyFontSize*1.48;if(bodyY+bodyLines.length*lineStep<=footerTop-h*.025)break;bodyFontSize*=.88}
 const lineStep=bodyFontSize*1.48;ctx.font='500 '+bodyFontSize+'px system-ui,"Noto Sans Devanagari",sans-serif';ctx.fillStyle=fg;bodyLines.slice(0,12).forEach((line,i)=>ctx.fillText(line,w/2,bodyY+i*lineStep));
-const lineY=h*.855;ctx.fillStyle='#f4bd50';ctx.fillRect(w*.19,lineY,w*.62,Math.max(4,h*.004));ctx.fillStyle=fg;ctx.font='750 '+(w*.038)+'px system-ui,"Noto Sans Devanagari",sans-serif';ctx.fillText(el('footerText').value,w/2,h*.90);
+const lineY=h*.855;ctx.fillStyle='#f4bd50';ctx.fillRect(w*.19,lineY,w*.62,Math.max(4,h*.004));ctx.fillStyle=fg;ctx.font='750 '+(w*.038)+'px system-ui,"Noto Sans Devanagari",sans-serif';ctx.fillText(el('footerText').value,w/2,h*.89);ctx.font='650 '+(w*.025)+'px system-ui,\"Noto Sans Devanagari\",sans-serif';if(el('ownerName').value)ctx.fillText('संपर्क: '+el('ownerName').value,w/2,h*.925);if(el('businessPhone').value)ctx.fillText('मो. '+el('businessPhone').value,w/2,h*.955);
 ctx.font='500 '+(w*.018)+'px system-ui,"Noto Sans Devanagari",sans-serif';ctx.fillStyle='rgba(255,255,255,.82)';ctx.fillText('माहिती अशी जी कामी येईल',w/2,h*.95);
 const status=el('previewStatus');if(status)status.textContent='पोस्टर तयार आहे ✓';
 }
 
 function readTemplates(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')}catch(e){return {}}}
 function refreshTemplates(selected){const data=readTemplates(),sel=el('savedTemplates');sel.innerHTML='<option value="">टेम्पलेट निवडा</option>';Object.keys(data).sort().forEach(name=>{const o=document.createElement('option');o.value=name;o.textContent=name;sel.appendChild(o)});if(selected&&data[selected])sel.value=selected}
-function currentDesign(){return {title:el('title').value,message:el('message').value,footerText:el('footerText').value,bg:el('bg').value,fg:el('fg').value,format:el('format').value,designStyle:el('designStyle').value}}
-function applyDesign(d){['title','message','footerText','bg','fg','format','designStyle'].forEach(k=>{if(d[k]!==undefined&&el(k))el(k).value=d[k]});draw()}
+function currentDesign(){return {title:el('title').value,message:el('message').value,footerText:el('footerText').value,ownerName:el('ownerName').value,businessPhone:el('businessPhone').value,bg:el('bg').value,fg:el('fg').value,format:el('format').value,designStyle:el('designStyle').value}}
+function applyDesign(d){['title','message','footerText','bg','fg','format','designStyle','ownerName','businessPhone'].forEach(k=>{if(d[k]!==undefined&&el(k))el(k).value=d[k]});draw()}
 el('saveTemplate').addEventListener('click',()=>{const name=prompt('या टेम्पलेटला नाव द्या (उदा. खरीप हंगाम सूचना):');if(!name||!name.trim())return;const data=readTemplates();data[name.trim()]=currentDesign();try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));refreshTemplates(name.trim());alert('तुमचे टेम्पलेट या ब्राउझरमध्ये सेव्ह झाले!')}catch(e){alert('ब्राउझर स्टोरेज भरले आहे. काही जुनी टेम्पलेट हटवा.')}});
 el('loadTemplate').addEventListener('click',()=>{const name=el('savedTemplates').value,data=readTemplates();if(!name||!data[name])return alert('कृपया सेव्ह केलेले टेम्पलेट निवडा.');applyDesign(data[name])});
 el('deleteTemplate').addEventListener('click',()=>{const name=el('savedTemplates').value;if(!name)return alert('हटवण्यासाठी टेम्पलेट निवडा.');if(!confirm('हे टेम्पलेट हटवायचे आहे का?'))return;const data=readTemplates();delete data[name];localStorage.setItem(STORAGE_KEY,JSON.stringify(data));refreshTemplates();});
@@ -216,8 +221,8 @@ el('closeCutter').addEventListener('click',()=>{cutterPanel.hidden=true;el('open
 el('cutterPdf').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(f.type!=='application/pdf'&&!f.name.toLowerCase().endsWith('.pdf')){alert('कृपया PDF फाइल निवडा.');e.target.value='';return}el('cutterStatus').textContent='PDF निवडली: '+f.name+' ('+(f.size/1024/1024).toFixed(2)+' MB). PDF मधील Front/Back पानांची रचना तपासून पुढील कटिंग पर्याय सक्रिय करायचे आहेत.';el('cutterPreview').innerHTML='<span>📄</span><strong>'+f.name.replace(/[&<>"]/g,'')+'</strong><small>PDF निवडली आहे. अद्याप कटिंग/प्रिंट PDF तयार झालेली नाही.</small>'});
 
 refreshTemplates();loadSavedLogo();
-['title','message','footerText','bg','fg','format','designStyle'].forEach(id=>el(id).addEventListener('input',draw));
-document.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>{const p=presets[btn.dataset.preset];el('title').value=p.title;el('message').value=p.message;el('bg').value=p.bg;el('fg').value=p.fg;draw()}));
+['title','message','footerText','ownerName','businessPhone','bg','fg','format','designStyle'].forEach(id=>el(id).addEventListener('input',draw));\nel('unlockContent').addEventListener('change',e=>setContentLock(!e.target.checked));\nsetContentLock(false);
+document.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>{const p=presets[btn.dataset.preset];applyPreset(p)}));
 el('photo').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(!f.type.startsWith('image/'))return alert('कृपया फोटो फाइल निवडा.');const img=new Image();img.onload=()=>{uploaded=img;draw()};img.onerror=()=>alert('फोटो उघडता आला नाही. दुसरी प्रतिमा निवडा.');img.src=URL.createObjectURL(f)});
 function generatePoster(){draw();el('previewStatus').textContent='पोस्टर तयार झाले ✓';el('poster').scrollIntoView({behavior:'smooth',block:'center'})}
 el('generate').addEventListener('click',generatePoster);
