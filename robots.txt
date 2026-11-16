@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mnbvcczlkjhgffsa.github.io/maha-corner/sitemap.xml
